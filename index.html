@@ -22,6 +22,34 @@ body{
     position:relative;
 }
 
+body::before,
+body::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+}
+
+body::before{
+    background:
+      radial-gradient(circle at 18% 18%, rgba(255, 105, 180, 0.24), transparent 45%),
+      radial-gradient(circle at 78% 12%, rgba(120, 170, 255, 0.2), transparent 42%),
+      radial-gradient(circle at 50% 62%, rgba(165, 120, 255, 0.16), transparent 55%);
+    filter: blur(14px);
+    animation: auroraDrift 18s ease-in-out infinite alternate;
+    z-index:0;
+}
+
+body::after{
+    box-shadow: inset 0 0 200px rgba(0,0,0,0.6);
+    z-index:6;
+}
+
+@keyframes auroraDrift{
+    from{ transform: translateX(-10px) translateY(5px) scale(1); }
+    to{ transform: translateX(12px) translateY(-8px) scale(1.06); }
+}
+
 /* ===== ANNIVERSARY TEXT ===== */
 /* ===== ANNIVERSARY MESSAGE ===== */
 .message{
@@ -30,6 +58,13 @@ body{
     z-index:5;
     opacity:0;
     animation: fadeIn 3s ease forwards 6s;
+    padding:24px 34px;
+    border:1px solid rgba(255,255,255,0.24);
+    border-radius:24px;
+    background: linear-gradient(160deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+    backdrop-filter: blur(6px);
+    box-shadow: 0 15px 45px rgba(0,0,0,0.35),
+                inset 0 0 40px rgba(255,192,238,0.08);
 }
 
 .message h1{
@@ -39,6 +74,11 @@ body{
         0 0 10px #fff,
         0 0 20px #ff4da6,
         0 0 40px #ff1493;
+}
+
+.message h1 .heart{
+    display:inline-block;
+    animation: pulse 1.8s ease-in-out infinite;
 }
 
 .message h2{
@@ -62,10 +102,16 @@ body{
     to{ opacity:1; }
 }
 
+@keyframes pulse{
+    0%, 100%{ transform:scale(1); }
+    50%{ transform:scale(1.15); }
+}
+
 /* Responsive text scaling */
 @media(max-width:768px){
     .message h1{ font-size:2.5rem; }
     .message h2{ font-size:1.4rem; }
+    .message{ padding:18px 22px; width:min(90vw, 440px); }
 }
 
 /* ===== CANVAS SKY ===== */
@@ -125,6 +171,7 @@ canvas{
     opacity:0.7;
     animation: floatUp linear infinite;
     z-index:2;
+    box-shadow:0 0 10px rgba(255,255,255,0.9);
 }
 
 @keyframes floatUp{
@@ -132,12 +179,31 @@ canvas{
     100%{ transform:translateY(-100vh); opacity:0; }
 }
 
+.shooting-star{
+    position:absolute;
+    top:-12px;
+    width:130px;
+    height:2px;
+    background:linear-gradient(90deg, rgba(255,255,255,0.9), rgba(255,255,255,0));
+    transform:rotate(25deg);
+    filter:drop-shadow(0 0 10px rgba(255,255,255,0.8));
+    z-index:2;
+    pointer-events:none;
+    animation:shoot 1.3s ease-out forwards;
+}
+
+@keyframes shoot{
+    0%{ transform: translate3d(0,0,0) rotate(25deg); opacity:0; }
+    10%{ opacity:1; }
+    100%{ transform: translate3d(340px,340px,0) rotate(25deg); opacity:0; }
+}
+
 </style>
 </head>
 <body>
 
 <div class="message">
-    <h1>Happy Anniversary Babi❤️</h1>
+    <h1>Happy Anniversary Babi<span class="heart">❤️</span></h1>
     <h2>I Love You Always 😘</h2>
 </div>
 
@@ -325,6 +391,21 @@ function createParticle(){
     setTimeout(()=>p.remove(),12000);
 }
 setInterval(createParticle,400);
+
+function createShootingStar(){
+    const star=document.createElement("div");
+    star.className="shooting-star";
+    star.style.left=Math.random()*window.innerWidth*0.75+"px";
+    star.style.top=Math.random()*window.innerHeight*0.35+"px";
+    document.body.appendChild(star);
+    setTimeout(()=>star.remove(),1300);
+}
+
+setInterval(()=>{
+    if(Math.random()<0.6){
+        createShootingStar();
+    }
+},2800);
 
 </script>
 
