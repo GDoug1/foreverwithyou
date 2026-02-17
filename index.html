@@ -91,6 +91,7 @@ canvas{
     opacity:1;
     transform:translateY(0);
     animation: rise 3s ease forwards;
+    will-change: transform, opacity;
 }
 
 @keyframes rise{
@@ -145,14 +146,24 @@ canvas{
 const canvas = document.getElementById("sky");
 const ctx = canvas.getContext("2d");
 const backgroundStars = [];
+const SKY_SEED = 18022021;
+
+function createSeededRandom(seed){
+    let state = seed;
+    return function next(){
+        state = (state * 1664525 + 1013904223) % 4294967296;
+        return state / 4294967296;
+    };
+}
 
 function regenerateBackgroundStars(){
+    const random = createSeededRandom(SKY_SEED);
     backgroundStars.length = 0;
     for(let i=0;i<120;i++){
         backgroundStars.push({
-            x: Math.random()*canvas.width,
-            y: Math.random()*canvas.height,
-            size: 0.5+Math.random()*1.5,
+            x: random(),
+            y: random(),
+            size: 0.5+random()*1.5,
         });
     }
 }
@@ -182,8 +193,8 @@ stars.push({x:0.32,y:0.42,size:4,color:"red"});
 /* Pleiades cluster */
 for(let i=0;i<7;i++){
     stars.push({
-        x:0.3+Math.random()*0.05,
-        y:0.35+Math.random()*0.05,
+        x:0.3+pleiadesRandom()*0.05,
+        y:0.35+pleiadesRandom()*0.05,
         size:1.5,
         color:"white"
     });
@@ -196,8 +207,8 @@ function drawSky(){
     /* Background stars */
     backgroundStars.forEach(star=>{
         ctx.beginPath();
-        ctx.arc(star.x,
-                star.y,
+        ctx.arc(star.x*canvas.width,
+                star.y*canvas.height,
                 star.size,0,Math.PI*2);
         ctx.fillStyle="white";
         ctx.fill();
