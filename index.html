@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>February 18, 2021 – Our Sky ❤️</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body{
+    height:100vh;
+    overflow:hidden;
+    font-family:'Cormorant Garamond',serif;
+    background: radial-gradient(circle at bottom, #14001f, #030010 70%);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:white;
+    position:relative;
+}
+
+/* ===== ANNIVERSARY TEXT ===== */
+/* ===== ANNIVERSARY MESSAGE ===== */
+.message{
+    position:absolute;
+    text-align:center;
+    z-index:5;
+    opacity:0;
+    animation: fadeIn 3s ease forwards 6s;
+}
+
+.message h1{
+    font-size:4rem;
+    letter-spacing:4px;
+    text-shadow:
+        0 0 10px #fff,
+        0 0 20px #ff4da6,
+        0 0 40px #ff1493;
+}
+
+.message h2{
+    margin-top:15px;
+    font-size:2rem;
+    font-weight:400;
+    letter-spacing:2px;
+    color:#ffd6f2;
+    text-shadow:
+        0 0 8px rgba(255,255,255,0.8),
+        0 0 20px rgba(255,105,180,0.6);
+    opacity:0;
+    animation: fadeSub 3s ease forwards 8s;
+}
+
+@keyframes fadeIn{
+    to{ opacity:1; transform:scale(1.05); }
+}
+
+@keyframes fadeSub{
+    to{ opacity:1; }
+}
+
+/* Responsive text scaling */
+@media(max-width:768px){
+    .message h1{ font-size:2.5rem; }
+    .message h2{ font-size:1.4rem; }
+}
+
+/* ===== CANVAS SKY ===== */
+canvas{
+    position:absolute;
+    top:0;
+    left:0;
+    z-index:1;
+}
+
+/* ===== ROSE FIELD ===== */
+.garden{
+    position:absolute;
+    bottom:0;
+    width:100%;
+    height:45%;
+    z-index:3;
+}
+
+.rose-wrapper{
+    position:absolute;
+    bottom:0;
+    opacity:0;
+    transform:translateY(80px);
+    animation: rise 3s ease forwards;
+}
+
+@keyframes rise{
+    to{ transform:translateY(0); opacity:1; }
+}
+
+.rose{
+    transform-origin:bottom center;
+    animation:sway 6s ease-in-out infinite;
+}
+
+@keyframes sway{
+    0%,100%{ transform:rotate(0deg); }
+    50%{ transform:rotate(2deg); }
+}
+
+/* Floating glow particles */
+.particle{
+    position:absolute;
+    width:3px;
+    height:3px;
+    background:white;
+    border-radius:50%;
+    opacity:0.7;
+    animation: floatUp linear infinite;
+    z-index:2;
+}
+
+@keyframes floatUp{
+    0%{ transform:translateY(0); opacity:1; }
+    100%{ transform:translateY(-100vh); opacity:0; }
+}
+
+</style>
+</head>
+<body>
+
+<div class="message">
+    <h1>Happy Anniversary Babi❤️</h1>
+    <h2>I Love You Always 😘</h2>
+</div>
+
+<canvas id="sky"></canvas>
+<div class="garden" id="garden"></div>
+
+<script>
+/* ===========================
+   SKY - FEB 18 2021
+=========================== */
+
+const canvas = document.getElementById("sky");
+const ctx = canvas.getContext("2d");
+
+function resize(){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener("resize", resize);
+
+/* Winter Hexagon Major Stars */
+const stars = [
+    {x:0.5,y:0.75,size:4,color:"white"},      // Sirius
+    {x:0.45,y:0.45,size:3,color:"white"},     // Betelgeuse
+    {x:0.55,y:0.55,size:3,color:"white"},     // Rigel
+    {x:0.7,y:0.5,size:3,color:"white"},       // Procyon
+    {x:0.35,y:0.4,size:3,color:"white"},      // Aldebaran
+    {x:0.6,y:0.3,size:3,color:"white"},       // Capella
+];
+
+/* Mars near Taurus */
+stars.push({x:0.32,y:0.42,size:4,color:"red"});
+
+/* Pleiades cluster */
+for(let i=0;i<7;i++){
+    stars.push({
+        x:0.3+Math.random()*0.05,
+        y:0.35+Math.random()*0.05,
+        size:1.5,
+        color:"white"
+    });
+}
+
+/* Draw sky */
+function drawSky(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    /* Background stars */
+    for(let i=0;i<120;i++){
+        ctx.beginPath();
+        ctx.arc(Math.random()*canvas.width,
+                Math.random()*canvas.height,
+                1,0,Math.PI*2);
+        ctx.fillStyle="white";
+        ctx.fill();
+    }
+
+    /* Major stars */
+    stars.forEach(star=>{
+        ctx.beginPath();
+        ctx.arc(star.x*canvas.width,
+                star.y*canvas.height,
+                star.size,0,Math.PI*2);
+        ctx.fillStyle=star.color;
+        ctx.shadowBlur=15;
+        ctx.shadowColor=star.color;
+        ctx.fill();
+    });
+
+    /* Winter Hexagon lines */
+    ctx.strokeStyle="rgba(255,255,255,0.3)";
+    ctx.lineWidth=1;
+    ctx.beginPath();
+    ctx.moveTo(stars[0].x*canvas.width, stars[0].y*canvas.height);
+    ctx.lineTo(stars[1].x*canvas.width, stars[1].y*canvas.height);
+    ctx.lineTo(stars[4].x*canvas.width, stars[4].y*canvas.height);
+    ctx.lineTo(stars[5].x*canvas.width, stars[5].y*canvas.height);
+    ctx.lineTo(stars[3].x*canvas.width, stars[3].y*canvas.height);
+    ctx.lineTo(stars[0].x*canvas.width, stars[0].y*canvas.height);
+    ctx.stroke();
+}
+
+drawSky();
+
+/* ===========================
+   DYNAMIC ROSE FIELD
+=========================== */
+
+const garden = document.getElementById("garden");
+
+function createRose(xPos){
+    const wrapper = document.createElement("div");
+    wrapper.className="rose-wrapper";
+    wrapper.style.left=xPos+"%";
+    wrapper.style.animationDelay=Math.random()*3+"s";
+
+    const size=100+Math.random()*200;
+
+    wrapper.innerHTML=`
+    <svg class="rose" width="${size}" viewBox="0 0 300 400">
+        <path d="M150 400 C140 300 160 250 150 200"
+              stroke="#1e7a3b"
+              stroke-width="8"
+              fill="none"/>
+
+        <ellipse cx="120" cy="280" rx="40" ry="20"
+                 fill="#2fa84f" transform="rotate(-30 120 280)"/>
+        <ellipse cx="180" cy="260" rx="40" ry="20"
+                 fill="#2fa84f" transform="rotate(30 180 260)"/>
+
+        <ellipse cx="150" cy="180" rx="60" ry="40" fill="#b30059"/>
+        <ellipse cx="150" cy="160" rx="50" ry="35" fill="#cc0066"/>
+        <ellipse cx="150" cy="140" rx="35" ry="25" fill="#ff4da6"/>
+        <circle cx="150" cy="150" r="20" fill="#ff99cc"/>
+    </svg>
+    `;
+    garden.appendChild(wrapper);
+}
+
+/* Generate field */
+for(let i=0;i<=100;i+=6){
+    createRose(i+Math.random()*4);
+}
+
+/* ===========================
+   FLOATING PARTICLES
+=========================== */
+
+function createParticle(){
+    const p=document.createElement("div");
+    p.className="particle";
+    p.style.left=Math.random()*window.innerWidth+"px";
+    p.style.animationDuration=(6+Math.random()*6)+"s";
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(),12000);
+}
+setInterval(createParticle,400);
+
+</script>
+
+</body>
+</html>
