@@ -122,6 +122,19 @@ canvas{
     z-index:1;
 }
 
+.credit{
+    position:fixed;
+    right:14px;
+    bottom:10px;
+    z-index:7;
+    font-size:0.9rem;
+    letter-spacing:0.5px;
+    color:rgba(255,255,255,0.72);
+    text-shadow:0 0 6px rgba(0,0,0,0.55);
+    user-select:none;
+    pointer-events:none;
+}
+
 /* ===== ROSE FIELD ===== */
 .garden{
     position:absolute;
@@ -209,6 +222,7 @@ canvas{
 
 <canvas id="sky"></canvas>
 <div class="garden" id="garden"></div>
+<div class="credit">Made By Jaden Gil Rivera</div>
 
 <script>
 /* ===========================
