@@ -81,8 +81,9 @@ canvas{
     position:absolute;
     bottom:0;
     width:100%;
-    height:45%;
+    height:52%;
     z-index:3;
+    pointer-events:none;
 }
 
 .rose-wrapper{
@@ -101,13 +102,17 @@ canvas{
 
 .rose{
     transform-origin:bottom center;
-    animation:sway 6s ease-in-out infinite;
+    filter: drop-shadow(0 10px 12px rgba(0,0,0,0.35));
+    animation:sway 7s ease-in-out infinite;
 }
 
 @keyframes sway{
     0%,100%{ transform:rotate(0deg); }
-    50%{ transform:rotate(2deg); }
+    50%{ transform:rotate(2.8deg); }
 }
+
+.rose-wrapper:nth-child(even) .rose{ animation-duration:8s; }
+.rose-wrapper:nth-child(3n) .rose{ animation-duration:6.5s; }
 
 /* Floating glow particles */
 .particle{
@@ -252,25 +257,50 @@ function createRose(xPos){
     wrapper.className="rose-wrapper";
     wrapper.style.left=xPos+"%";
     wrapper.style.animationDelay=Math.random()*3+"s";
+    wrapper.style.zIndex=String(2+Math.floor(Math.random()*3));
 
-    const size=100+Math.random()*200;
+    const size=120+Math.random()*160;
+    const bloomHue=325+Math.random()*28;
+    const stemHue=125+Math.random()*16;
+    const bloomSaturation=60+Math.random()*18;
+    const bloomLight=35+Math.random()*12;
+
+    const petalA=`hsl(${bloomHue} ${bloomSaturation}% ${bloomLight}%)`;
+    const petalB=`hsl(${bloomHue+8} ${bloomSaturation+8}% ${bloomLight+8}%)`;
+    const petalC=`hsl(${bloomHue+14} ${bloomSaturation+10}% ${bloomLight+16}%)`;
+    const core=`hsl(${bloomHue+18} ${bloomSaturation+8}% ${bloomLight+22}%)`;
+    const leaf=`hsl(${stemHue} 55% 40%)`;
+    const stem=`hsl(${stemHue+4} 58% 32%)`;
 
     wrapper.innerHTML=`
     <svg class="rose" width="${size}" viewBox="0 0 300 400">
+        <defs>
+            <radialGradient id="bloom-${xPos}" cx="45%" cy="35%">
+                <stop offset="0%" stop-color="${petalC}"/>
+                <stop offset="55%" stop-color="${petalB}"/>
+                <stop offset="100%" stop-color="${petalA}"/>
+            </radialGradient>
+            <linearGradient id="stem-${xPos}" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="hsl(${stemHue+6} 65% 42%)"/>
+                <stop offset="100%" stop-color="${stem}"/>
+            </linearGradient>
+        </defs>
         <path d="M150 400 C140 300 160 250 150 200"
-              stroke="#1e7a3b"
+              stroke="url(#stem-${xPos})"
               stroke-width="8"
               fill="none"/>
 
         <ellipse cx="120" cy="280" rx="40" ry="20"
-                 fill="#2fa84f" transform="rotate(-30 120 280)"/>
+                 fill="${leaf}" transform="rotate(-30 120 280)"/>
         <ellipse cx="180" cy="260" rx="40" ry="20"
-                 fill="#2fa84f" transform="rotate(30 180 260)"/>
+                 fill="${leaf}" transform="rotate(30 180 260)"/>
 
-        <ellipse cx="150" cy="180" rx="60" ry="40" fill="#b30059"/>
-        <ellipse cx="150" cy="160" rx="50" ry="35" fill="#cc0066"/>
-        <ellipse cx="150" cy="140" rx="35" ry="25" fill="#ff4da6"/>
-        <circle cx="150" cy="150" r="20" fill="#ff99cc"/>
+        <ellipse cx="150" cy="184" rx="62" ry="42" fill="${petalA}" opacity="0.96"/>
+        <ellipse cx="120" cy="170" rx="44" ry="30" fill="${petalB}" opacity="0.9" transform="rotate(-12 120 170)"/>
+        <ellipse cx="180" cy="168" rx="44" ry="30" fill="${petalB}" opacity="0.9" transform="rotate(12 180 168)"/>
+        <ellipse cx="150" cy="154" rx="50" ry="34" fill="url(#bloom-${xPos})"/>
+        <ellipse cx="150" cy="138" rx="35" ry="24" fill="${petalC}"/>
+        <circle cx="150" cy="148" r="20" fill="${core}"/>
     </svg>
     `;
     garden.appendChild(wrapper);
@@ -278,7 +308,7 @@ function createRose(xPos){
 
 /* Generate field */
 for(let i=0;i<=100;i+=6){
-    createRose(i+Math.random()*4);
+    createRose(i+Math.random()*3);
 }
 
 /* ===========================
