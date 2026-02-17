@@ -84,6 +84,7 @@ canvas{
     height:52%;
     z-index:3;
     pointer-events:none;
+    overflow:visible;
 }
 
 .rose-wrapper{
@@ -152,6 +153,7 @@ const canvas = document.getElementById("sky");
 const ctx = canvas.getContext("2d");
 const backgroundStars = [];
 const SKY_SEED = 18022021;
+const pleiadesRandom = createSeededRandom(SKY_SEED + 1);
 
 function createSeededRandom(seed){
     let state = seed;
@@ -179,8 +181,6 @@ function resize(){
     regenerateBackgroundStars();
     drawSky();
 }
-resize();
-window.addEventListener("resize", resize);
 
 /* Winter Hexagon Major Stars */
 const stars = [
@@ -244,7 +244,8 @@ function drawSky(){
     ctx.stroke();
 }
 
-drawSky();
+resize();
+window.addEventListener("resize", resize);
 
 /* ===========================
    DYNAMIC ROSE FIELD
@@ -265,15 +266,15 @@ function createRose(xPos){
     const bloomSaturation=60+Math.random()*18;
     const bloomLight=35+Math.random()*12;
 
-    const petalA=`hsl(${bloomHue} ${bloomSaturation}% ${bloomLight}%)`;
-    const petalB=`hsl(${bloomHue+8} ${bloomSaturation+8}% ${bloomLight+8}%)`;
-    const petalC=`hsl(${bloomHue+14} ${bloomSaturation+10}% ${bloomLight+16}%)`;
-    const core=`hsl(${bloomHue+18} ${bloomSaturation+8}% ${bloomLight+22}%)`;
-    const leaf=`hsl(${stemHue} 55% 40%)`;
-    const stem=`hsl(${stemHue+4} 58% 32%)`;
+    const petalA=`hsl(${bloomHue}, ${bloomSaturation}%, ${bloomLight}%)`;
+    const petalB=`hsl(${bloomHue+8}, ${bloomSaturation+8}%, ${bloomLight+8}%)`;
+    const petalC=`hsl(${bloomHue+14}, ${bloomSaturation+10}%, ${bloomLight+16}%)`;
+    const core=`hsl(${bloomHue+18}, ${bloomSaturation+8}%, ${bloomLight+22}%)`;
+    const leaf=`hsl(${stemHue}, 55%, 40%)`;
+    const stem=`hsl(${stemHue+4}, 58%, 32%)`;
 
     wrapper.innerHTML=`
-    <svg class="rose" width="${size}" viewBox="0 0 300 400">
+    <svg class="rose" width="${size}" height="${(size*4/3).toFixed(2)}" viewBox="0 0 300 400">
         <defs>
             <radialGradient id="bloom-${xPos}" cx="45%" cy="35%">
                 <stop offset="0%" stop-color="${petalC}"/>
@@ -282,7 +283,7 @@ function createRose(xPos){
             </radialGradient>
             <linearGradient id="stem-${xPos}" x1="0%" y1="0%" x2="0%" y2="100%">
                 <stop offset="0%" stop-color="hsl(${stemHue+6} 65% 42%)"/>
-                <stop offset="100%" stop-color="${stem}"/>
+                <stop offset="0%" stop-color="hsl(${stemHue+6}, 65%, 42%)"/>
             </linearGradient>
         </defs>
         <path d="M150 400 C140 300 160 250 150 200"
