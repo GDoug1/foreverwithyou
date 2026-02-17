@@ -184,8 +184,8 @@ canvas{
     top:-12px;
     width:130px;
     height:2px;
-    background:linear-gradient(90deg, rgba(255,255,255,0.9), rgba(255,255,255,0));
-    transform:rotate(25deg);
+    background:linear-gradient(-270deg, rgba(255,255,255,0.9), rgba(255,255,255,0));
+    transform:rotate(30deg);
     filter:drop-shadow(0 0 10px rgba(255,255,255,0.8));
     z-index:2;
     pointer-events:none;
@@ -193,9 +193,9 @@ canvas{
 }
 
 @keyframes shoot{
-    0%{ transform: translate3d(0,0,0) rotate(25deg); opacity:0; }
+    0%{ transform: translate3d(0,0,0) rotate(25deg); opacity:0; }0%{ transform: translate3d(0,0,0) rotate(-25deg); opacity:0; }
     10%{ opacity:1; }
-    100%{ transform: translate3d(340px,340px,0) rotate(25deg); opacity:0; }
+    100%{ transform: translate3d(-340px,340px,0) rotate(-25deg); opacity:0; }
 }
 
 </style>
