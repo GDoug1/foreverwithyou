@@ -22,6 +22,73 @@ body{
     position:relative;
 }
 
+.film-slider{
+    position:absolute;
+    top:8%;
+    left:50%;
+    transform:translateX(-50%);
+    z-index:5;
+    width:min(90vw, 720px);
+    overflow:hidden;
+    border-radius:16px;
+    border:2px solid rgba(255,255,255,0.22);
+    background:
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,0.05), transparent 60%),
+        #141218;
+    box-shadow:0 14px 40px rgba(0,0,0,0.45), inset 0 0 24px rgba(255,255,255,0.08);
+    padding:16px 14px;
+    opacity:0;
+    animation: fadeIn 2.5s ease forwards 4s;
+}
+
+.film-slider::before,
+.film-slider::after{
+    content:"";
+    position:absolute;
+    left:0;
+    right:0;
+    height:10px;
+    background: repeating-linear-gradient(
+        90deg,
+        rgba(255,255,255,0.08) 0 12px,
+        rgba(20,18,24,0.95) 12px 22px
+    );
+}
+
+.film-slider::before{ top:0; }
+.film-slider::after{ bottom:0; }
+
+.film-track{
+    display:flex;
+    gap:14px;
+    width:max-content;
+    animation: filmSlide 20s linear infinite;
+}
+
+.film-frame{
+    width:180px;
+    height:122px;
+    border-radius:10px;
+    border:2px solid rgba(255,255,255,0.16);
+    background:#09090c;
+    padding:5px;
+    flex-shrink:0;
+}
+
+.film-frame img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    border-radius:6px;
+    filter:saturate(0.85) contrast(1.05);
+}
+
+@keyframes filmSlide{
+    0%{ transform:translateX(0); }
+    100%{ transform:translateX(-50%); }
+}
+
+
 body::before,
 body::after{
     content:"";
@@ -109,6 +176,11 @@ body::after{
 
 /* Responsive text scaling */
 @media(max-width:768px){
+    .film-slider{
+        top:5%;
+        padding:14px 10px;
+    }
+    .film-frame{ width:130px; height:92px; }
     .message h1{ font-size:2.5rem; }
     .message h2{ font-size:1.4rem; }
     .message{ padding:18px 22px; width:min(90vw, 440px); }
@@ -214,6 +286,22 @@ canvas{
 </style>
 </head>
 <body>
+
+<div class="film-slider" aria-label="Photo film strip slideshow">
+    <div class="film-track">
+        <!-- Replace image URLs below with your own photos -->
+        <div class="film-frame"><img src="https://images.unsplash.com/photo-1516589091380-5d8e87df6999?auto=format&fit=crop&w=600&q=80" alt="Memory 1"></div>
+        <div class="film-frame"><img src="https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?auto=format&fit=crop&w=600&q=80" alt="Memory 2"></div>
+        <div class="film-frame"><img src="https://images.unsplash.com/photo-1511988617509-a57c8a288659?auto=format&fit=crop&w=600&q=80" alt="Memory 3"></div>
+        <div class="film-frame"><img src="https://images.unsplash.com/photo-1529634897134-245ec7f1e5ed?auto=format&fit=crop&w=600&q=80" alt="Memory 4"></div>
+        <div class="film-frame"><img src="https://images.unsplash.com/photo-1518568814500-bf0f8d125f46?auto=format&fit=crop&w=600&q=80" alt="Memory 5"></div>
+        <div class="film-frame"><img src="https://images.unsplash.com/photo-1516589091380-5d8e87df6999?auto=format&fit=crop&w=600&q=80" alt="Memory 1 duplicate"></div>
+        <div class="film-frame"><img src="https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?auto=format&fit=crop&w=600&q=80" alt="Memory 2 duplicate"></div>
+        <div class="film-frame"><img src="https://images.unsplash.com/photo-1511988617509-a57c8a288659?auto=format&fit=crop&w=600&q=80" alt="Memory 3 duplicate"></div>
+        <div class="film-frame"><img src="https://images.unsplash.com/photo-1529634897134-245ec7f1e5ed?auto=format&fit=crop&w=600&q=80" alt="Memory 4 duplicate"></div>
+        <div class="film-frame"><img src="https://images.unsplash.com/photo-1518568814500-bf0f8d125f46?auto=format&fit=crop&w=600&q=80" alt="Memory 5 duplicate"></div>
+    </div>
+</div>
 
 <div class="message">
     <h1>Happy Anniversary Babi<span class="heart">❤️</span></h1>
