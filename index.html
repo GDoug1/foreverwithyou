@@ -88,12 +88,13 @@ canvas{
 .rose-wrapper{
     position:absolute;
     bottom:0;
-    opacity:0;
-    transform:translateY(80px);
+    opacity:1;
+    transform:translateY(0);
     animation: rise 3s ease forwards;
 }
 
 @keyframes rise{
+    from{ transform:translateY(80px); opacity:0; }
     to{ transform:translateY(0); opacity:1; }
 }
 
